@@ -1,0 +1,52 @@
+# macOS
+.DS_Store
+
+# Xcode — per-user state. Breakpoints, window layout, last-open files,
+# scheme selection. Changes on every launch and conflicts constantly.
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Build products. DerivedData normally lives in ~/Library, but Xcode can be
+# pointed at the project directory instead.
+build/
+DerivedData/
+*.o
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+Packages/
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Accessibility / profiling output
+*.xcresult
+*.trace
+
+# Injected secrets, should any ever appear
+*.xcconfig.local
+.env
+
+# NOT ignored, deliberately:
+#
+#   iRob/Fonts/*.ttf
+#     Plus Jakarta Sans and IBM Plex Mono are bundled resources, not
+#     dependencies. The Jakarta weights are custom builds — instantiated from
+#     the variable font and given unique family names so iOS can address each
+#     one — and cannot be re-fetched from Google Fonts as-is. Losing them
+#     silently drops the whole app back to San Francisco.
+#
+#   iRob.xcodeproj/project.pbxproj
+#     Carries the settings the prototype depends on: iPhone-only, portrait-only,
+#     light-appearance lock, iOS 26 deployment target.
+#
+#   iRob.xcodeproj/project.xcworkspace/xcshareddata/
+#     Shared workspace settings, as opposed to the per-user xcuserdata above.
