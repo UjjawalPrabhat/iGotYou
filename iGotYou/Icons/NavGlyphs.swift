@@ -194,7 +194,7 @@ struct CountBadge: View {
             .padding(.horizontal, 4)
             .frame(minWidth: 16, minHeight: 16)
             .background(IGY.C.alert, in: Capsule())
-            // On the green band the badge needs to separate from the bell's
+            // On the green band the badge has to separate from the bell's
             // translucent well, which is nearly the same value as the red.
             .overlay {
                 if onDark { Capsule().strokeBorder(.white.opacity(0.9), lineWidth: 1.5) }
@@ -218,7 +218,6 @@ struct CountBadge: View {
             ChevronGlyph()
             ChevronGlyph(direction: .right)
             AvatarGlyph()
-            AvatarGlyph(onDark: true)
             CountBadge(count: 7)
         }
     }

@@ -61,8 +61,6 @@ extension IGY {
         let tracking: CGFloat
 
         // Display
-        /// 700 27 / −0.7 — "Good morning, Ujjawal", "Explore Kuta"
-        static let greeting     = TextRole(font: .jakarta(700, 27, relativeTo: .title), tracking: -0.7)
         /// 800 34 / −1.0 — the wallet balance
         static let balance      = TextRole(font: .jakarta(800, 34, relativeTo: .largeTitle), tracking: -1.0)
 

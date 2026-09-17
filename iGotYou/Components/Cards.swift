@@ -6,39 +6,40 @@ import SwiftUI
 
 /// One of the four doors on Home.
 ///
-/// The doors carry the illustrations rather than the drawn glyphs. The Turn 10
-/// note dropped the tinted tiles so that "the icons alone have to tell the four
-/// services apart" — that argument held while all four were line drawings in
-/// one hand. These four aren't: two are circular badges with their own
-/// backgrounds and two are scenes, one of them not even square. Left bare on a
-/// white card they'd read as four clippings rather than a set.
+/// No card and no ring. The illustration sits on the sheet, with the label
+/// under it — Grab's arrangement, and the one the Turn 10 note was reaching for
+/// when it dropped the tinted tiles so "the icons alone have to tell the four
+/// services apart". Two containers around each icon was one too many: a circle
+/// inside a rounded square inside a grid, with a hairline on each.
 ///
-/// So the tile comes back, as a circle. It gives the ride scene somewhere to
-/// be cropped to, gives the two transparent ones a ground, and makes the one
-/// shape all four share do the work the drawn set used to do by hand.
+/// The circular *clip* stays, with no stroke and no fill of its own. It is not
+/// a container — it is how these four particular images are made to agree.
+/// Three of them already carry a mint disc; the ride scene is a 4:3 rectangle
+/// and bills is a white square, and cropping both to the same circle is what
+/// stops two of the four showing a box the others don't have.
 struct ServiceCard: View {
     let service: Service
     var action: () -> Void = {}
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 10) {
                 artwork
-                Spacer(minLength: 8)
-                VStack(alignment: .leading, spacing: 2) {
+
+                VStack(alignment: .leading, spacing: 1) {
                     Text(service.title)
-                        .textRole(service.cardHeight > 140 ? .serviceTitle : .serviceTitleSm)
+                        .textRole(.serviceTitleSm)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
                     Text(service.status)
                         .textRole(.captionMed, IGY.C.inkMuted)
+                        .lineLimit(1)
                 }
             }
+            // Sized by its content now. The 146/132pt card heights existed to
+            // give the cards a shape; with no card they only added dead space
+            // between the icon and the words it belongs to.
             .frame(maxWidth: .infinity, alignment: .leading)
-            // Padding before the height, so the 18pt inset sits *inside* the
-            // 146/132pt card rather than adding to it — the CSS is
-            // `box-sizing: border-box`.
-            .padding(18)
-            .frame(height: service.cardHeight)
-            .liftedCard()
             .contentShape(.rect)
         }
         .buttonStyle(PressableCard())
@@ -47,25 +48,15 @@ struct ServiceCard: View {
     }
 
     private var artwork: some View {
-        let side = service.iconSize + 14
-
-        return ZStack {
-            // Shows through wherever the illustration is transparent, so the
-            // two with alpha sit on the same ground as the two without.
-            Circle().fill(IGY.C.surfaceMuted)
-
-            Image(service.artwork)
-                .resizable()
-                // Fill, not fit: the ride scene is 4:3 and fitting it would
-                // leave the tile showing above and below a letterboxed strip.
-                // Cropping to the circle loses the edges of that scene, which
-                // are background anyway.
-                .scaledToFill()
-        }
-        .frame(width: side, height: side)
-        .clipShape(.circle)
-        .overlay(Circle().strokeBorder(IGY.C.hairline, lineWidth: 1))
-        .accessibilityHidden(true)
+        Image(service.artwork)
+            .resizable()
+            // Fill, not fit: fitting the 4:3 ride scene would letterbox it
+            // inside the circle. Cropping loses that scene's left and right
+            // edges, which are background anyway.
+            .scaledToFill()
+            .frame(width: 62, height: 62)
+            .clipShape(.circle)
+            .accessibilityHidden(true)
     }
 }
 

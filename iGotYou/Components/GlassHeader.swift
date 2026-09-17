@@ -8,18 +8,22 @@ import SwiftUI
 // wrong, so the header reserves the safe area instead and lets iOS fill it.
 //
 // Two variants, both the same height:
-//   .location — Home. Location picker left, bell + avatar right.
+//   .location — Home. Where you are, left; bell + avatar right.
 //   .title    — Wallet, Activity. Big title left, avatar right.
 //
-// Two finishes. Glass is the default and covers the light screens. `onDark`
-// swaps in Grab's deep green band, which is the single most recognisable thing
-// about their app: every Grab screen opens on a green block, and the app is
-// identifiable from a thumbnail because of it. Home takes it; the interior
-// tabs stay on glass, because a green band on every screen would flatten the
+// Two finishes. Glass covers the interior tabs. `onDark` puts Home's bar on
+// Grab's deep green, which is the one piece of their chrome identifiable from
+// a thumbnail — worth keeping even now the tall greeting band under it is gone.
+// The interior tabs stay on glass: green on every screen would flatten a
 // hierarchy Grab itself doesn't have.
+//
+// The location has no "Deliver to" eyebrow. A label over a value spends a line
+// saying what the pin already says, and Zomato's header is the better pattern —
+// the place on top, its address under it, both tappable as one control. The
+// address is what actually disambiguates two saved places with similar names.
 
 enum HeaderContent {
-    case location(label: String, value: String, badge: Int)
+    case location(value: String, detail: String, badge: Int)
     case title(String)
 }
 
@@ -41,8 +45,8 @@ struct GlassHeader: View {
 
             HStack(alignment: .center, spacing: 10) {
                 switch content {
-                case let .location(label, value, badge):
-                    picker(label: label, value: value)
+                case let .location(value, detail, badge):
+                    picker(value: value, detail: detail)
                     Spacer(minLength: 8)
                     bell(badge: badge)
                     avatar
@@ -61,20 +65,22 @@ struct GlassHeader: View {
         .background(HeaderMaterial(onDark: onDark))
     }
 
-    private func picker(label: String, value: String) -> some View {
+    private func picker(value: String, detail: String) -> some View {
         Button(action: onLocation) {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(label).textRole(.eyebrow, subInk)
+            VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 5) {
-                    PinGlyph(color: onDark ? IGY.C.onBrand : IGY.C.brand)
-                    Text(value).textRole(.location, titleInk)
+                    PinGlyph(color: onDark ? IGY.C.onBrand : IGY.C.brand, filled: true)
+                    Text(value).textRole(.navTitleSm, titleInk)
                     ChevronGlyph(size: 6, color: titleInk)
                 }
+                Text(detail)
+                    .textRole(.caption, subInk)
+                    .lineLimit(1)
             }
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(label) \(value). Change")
+        .accessibilityLabel("Delivering to \(value), \(detail). Change")
     }
 
     private func bell(badge: Int) -> some View {
@@ -117,31 +123,25 @@ private struct HeaderMaterial: View {
     var body: some View {
         Group {
             if onDark {
-                // Opaque, not glass. The band is a *surface* in Grab's system,
+                // Opaque, not glass. The band is a surface in Grab's system,
                 // not chrome floating over one, and translucency here would let
-                // white cards bleed through and turn it muddy as you scroll.
-                // It also carries no bottom hairline and no shadow: the green
-                // continues into the greeting band below it as one block.
-                //
-                // This is the case Apple's guidance covers directly — glass is
-                // for the layer floating *above* content, and the green block
-                // is content's own ground.
+                // the white cards scrolling under it turn the green muddy.
                 IGY.C.brandDark
             } else if reduceTransparency {
                 IGY.C.surface.opacity(0.96)
             } else {
                 // The real material. This was a white tint over
-                // `.ultraThinMaterial` approximating it, written before the
-                // tab bar went native; now that the dock below is genuine
-                // Liquid Glass, an imitation at the opposite edge of the same
-                // screen read as a mismatch.
+                // `.ultraThinMaterial` approximating it, written before the tab
+                // bar went native; with genuine Liquid Glass in the dock below,
+                // an imitation at the opposite edge of the same screen read as
+                // a mismatch.
                 Rectangle()
                     .fill(.clear)
                     .glassEffect(.regular, in: .rect)
             }
         }
         .overlay(alignment: .bottom) {
-            if onDark == false && reduceTransparency {
+            if !onDark && reduceTransparency {
                 Rectangle().fill(IGY.C.hairline).frame(height: 0.5)
             }
         }
@@ -185,6 +185,8 @@ struct ServiceHeader<Trailing: View>: View {
         .padding(.horizontal, IGY.S.gutter)
         .padding(.top, 4)
         .frame(maxWidth: .infinity)
+        // Service flows are always on glass — they sit over a map or a list,
+        // never over the green.
         .background(HeaderMaterial())
     }
 }

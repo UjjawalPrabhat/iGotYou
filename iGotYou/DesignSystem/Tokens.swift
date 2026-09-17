@@ -11,7 +11,7 @@ import SwiftUI
 // while the composition stays ours:
 //
 //   - Green moved from the teal-leaning #168A63 to Grab green #00B14F, with a
-//     deep #00562A for the header band Grab puts at the top of every screen.
+//     deep #00562A for the header band.
 //   - The ink ramp was neutralised. The old greys carried a green cast that
 //     read as a second brand colour; Grab's text is plain neutral, which lets
 //     the green be the only thing on screen that is green.
@@ -68,11 +68,10 @@ extension IGY {
         static let brandTint     = Color(hex: 0xE4F7EB)   // mint fill
         static let brandTintEdge = Color(hex: 0xC4EDD3)   // ring around the avatar
 
-        /// The two darks behind Grab's signature top band. Everything set on
-        /// them is white or near-white, so they are never used as a text colour.
+        /// The dark behind the Home header. Everything set on it is white or
+        /// near-white, so it is never used as a text colour.
         static let brandDark     = Color(hex: 0x00562A)
-        static let brandMid      = Color(hex: 0x00873D)
-        /// Text and rules that sit *on* the dark band.
+        /// Text and rules that sit *on* that dark.
         static let onBrand       = Color.white
         static let onBrandMuted  = Color(hex: 0xBFE8CE)
 
