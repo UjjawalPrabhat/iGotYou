@@ -120,7 +120,9 @@ struct RideScreen: View {
                     Text(Mock.walletBalance).textRole(.caption, IGY.C.inkMuted)
                 }
                 Spacer(minLength: 0)
-                ChevronGlyph(size: 7)
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(IGY.C.inkSecondary)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 13)
@@ -268,7 +270,7 @@ struct MapCanvas: View {
         }
         .overlay(alignment: .topLeading) {
             if showsRoute {
-                PinGlyph(size: 20, color: IGY.C.coral, filled: true)
+                Image(systemName: "mappin.circle.fill").font(.system(size: 24)).foregroundStyle(IGY.C.coral)
                     .offset(x: 282, y: 374)
             }
         }
@@ -319,7 +321,7 @@ private struct MapCallout: View {
         @ViewBuilder var view: some View {
             switch self {
             case let .dot(c): Circle().fill(c).frame(width: 10, height: 10)
-            case let .pin(c): PinGlyph(size: 13, color: c, filled: true)
+            case let .pin(c): Image(systemName: "mappin.circle.fill").font(.system(size: 14)).foregroundStyle(c)
             }
         }
     }

@@ -69,9 +69,13 @@ struct GlassHeader: View {
         Button(action: onLocation) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 5) {
-                    PinGlyph(color: onDark ? IGY.C.onBrand : IGY.C.brand, filled: true)
+                    Image(systemName: "mappin.circle.fill")
+                        .font(.system(size: 17))
+                        .foregroundStyle(onDark ? IGY.C.onBrand : IGY.C.brand)
                     Text(value).textRole(.navTitleSm, titleInk)
-                    ChevronGlyph(size: 6, color: titleInk)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(titleInk)
                 }
                 Text(detail)
                     .textRole(.caption, subInk)
@@ -93,7 +97,9 @@ struct GlassHeader: View {
                                               lineWidth: onDark ? 1 : 0.5)
                     )
                     .frame(width: 36, height: 36)
-                BellGlyph(color: onDark ? IGY.C.onBrand : IGY.C.inkSecondary)
+                Image(systemName: "bell.fill")
+                    .font(.system(size: 15))
+                    .foregroundStyle(onDark ? IGY.C.onBrand : IGY.C.inkSecondary)
                     .frame(width: 36, height: 36)
                 if badge > 0 {
                     CountBadge(count: badge, onDark: onDark).offset(x: 5, y: -4)
@@ -106,9 +112,14 @@ struct GlassHeader: View {
     }
 
     private var avatar: some View {
-        Button(action: onAvatar) { AvatarGlyph(onDark: onDark) }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Your profile")
+        Button(action: onAvatar) {
+            Image(systemName: "person.crop.circle.fill")
+                .font(.system(size: 34))
+                .foregroundStyle(onDark ? IGY.C.onBrand.opacity(0.9) : IGY.C.brand)
+                .frame(width: 36, height: 36)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Your profile")
     }
 }
 

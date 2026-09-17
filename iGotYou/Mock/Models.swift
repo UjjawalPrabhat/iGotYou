@@ -42,15 +42,6 @@ enum Service: String, CaseIterable, Identifiable, Hashable {
         }
     }
 
-    /// Ride and Food get taller cards — they're the two services with the most
-    /// traffic, and the grid says so.
-    var cardHeight: CGFloat {
-        switch self {
-        case .ride, .food: 146
-        case .send, .bills: 132
-        }
-    }
-
     var iconSize: CGFloat {
         switch self {
         case .ride, .food: 48
@@ -291,9 +282,9 @@ struct SearchEntry: Identifiable, Hashable {
 
         @ViewBuilder @MainActor var glyph: some View {
             switch self {
-            case .place:   PinGlyph(size: 13, color: IGY.C.inkSecondary, filled: true)
+            case .place:   Image(systemName: "mappin.circle.fill").foregroundStyle(IGY.C.inkSecondary)
             case .dish:    FoodIcon(size: 18)
-            case .address: PinGlyph(size: 13, color: IGY.C.brandDeep)
+            case .address: Image(systemName: "house.fill").foregroundStyle(IGY.C.brandDeep)
             case let .service(s): s.icon(size: 18)
             }
         }

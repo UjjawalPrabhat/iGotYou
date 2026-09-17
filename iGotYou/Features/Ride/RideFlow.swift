@@ -449,7 +449,7 @@ private struct PickupMarkers: View {
                 let spot = Self.spots[min(i, Self.spots.count - 1)]
                 let isOn = point.id == selectedID
 
-                PinGlyph(size: 13, color: IGY.C.brandDeep, filled: true)
+                Image(systemName: "mappin.circle.fill").font(.system(size: 15)).foregroundStyle(IGY.C.brandDeep)
                     .opacity(isOn ? 0 : 1)
                     .offset(x: spot.x, y: spot.y)
 
@@ -461,7 +461,7 @@ private struct PickupMarkers: View {
 
             // The chosen pin, drawn once and moved. Last in the stack so it
             // never ends up behind a label.
-            PinGlyph(size: 26, color: IGY.C.brand, filled: true)
+            Image(systemName: "mappin.circle.fill").font(.system(size: 30)).foregroundStyle(IGY.C.brand)
                 .igyShadow(.card)
                 .offset(x: selectedSpot.x - 6.5, y: selectedSpot.y - 8)
                 .animation(.spring(response: 0.34, dampingFraction: 0.78),
@@ -483,7 +483,7 @@ private struct RouteRail: View {
                 Circle().fill(IGY.C.hairline).frame(width: 3, height: 3)
             }
 
-            PinGlyph(size: 14, color: IGY.C.coral, filled: true)
+            Image(systemName: "mappin.circle.fill").font(.system(size: 16)).foregroundStyle(IGY.C.coral)
         }
         .frame(width: 16)
         .accessibilityHidden(true)

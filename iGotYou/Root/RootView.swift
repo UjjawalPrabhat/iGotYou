@@ -25,26 +25,24 @@ struct RootView: View {
         @Bindable var app = app
 
         TabView(selection: $app.tab) {
-            Tab(value: AppTab.home) {
+            // SF Symbols, not drawn glyphs. The custom set had to be
+            // rasterised through `ImageRenderer` into template `UIImage`s
+            // because `UITabBar` won't take an arbitrary `Shape` — a whole
+            // caching layer to get icons the system already ships, in a set
+            // that tracks weight, scale, Dynamic Type and the tab bar's own
+            // selected/unselected treatment without being asked.
+            Tab(AppTab.home.title, systemImage: "house.fill", value: AppTab.home) {
                 HomeScreen()
-            } label: {
-                Label { Text(AppTab.home.title) }
-                icon: { TabGlyphImages.image(for: .home) }
             }
 
-
-            Tab(value: AppTab.wallet) {
+            Tab(AppTab.wallet.title, systemImage: "wallet.bifold.fill",
+                value: AppTab.wallet) {
                 WalletScreen()
-            } label: {
-                Label { Text(AppTab.wallet.title) }
-                icon: { TabGlyphImages.image(for: .wallet) }
             }
 
-            Tab(value: AppTab.activity) {
+            Tab(AppTab.activity.title, systemImage: "clock.fill",
+                value: AppTab.activity) {
                 ActivityScreen()
-            } label: {
-                Label { Text(AppTab.activity.title) }
-                icon: { TabGlyphImages.image(for: .activity) }
             }
 
             // The search role only resolves into the detached capsule beside

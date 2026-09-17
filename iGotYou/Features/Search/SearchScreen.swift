@@ -126,7 +126,9 @@ private struct RecentSearchRow: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                ChevronGlyph(size: 7, direction: .right, color: IGY.C.inkMuted)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(IGY.C.inkMuted)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 13)

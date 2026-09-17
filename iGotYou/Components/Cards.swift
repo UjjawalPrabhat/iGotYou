@@ -2,77 +2,6 @@ import SwiftUI
 
 // Reusable card and row components shared across the tab screens.
 
-// MARK: - Service door
-
-/// One of the four doors on Home.
-///
-/// No card and no ring. The illustration sits on the sheet, with the label
-/// under it — Grab's arrangement, and the one the Turn 10 note was reaching for
-/// when it dropped the tinted tiles so "the icons alone have to tell the four
-/// services apart". Two containers around each icon was one too many: a circle
-/// inside a rounded square inside a grid, with a hairline on each.
-///
-/// The circular *clip* stays, with no stroke and no fill of its own. It is not
-/// a container — it is how these four particular images are made to agree.
-/// Three of them already carry a mint disc; the ride scene is a 4:3 rectangle
-/// and bills is a white square, and cropping both to the same circle is what
-/// stops two of the four showing a box the others don't have.
-struct ServiceCard: View {
-    let service: Service
-    var action: () -> Void = {}
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 10) {
-                artwork
-
-                VStack(spacing: 1) {
-                    Text(service.title)
-                        .textRole(.serviceTitleSm)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                    Text(service.status)
-                        .textRole(.captionMed, IGY.C.inkMuted)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.9)
-                }
-                .multilineTextAlignment(.center)
-            }
-            // Centred in its half of the row.
-            //
-            // Left-aligned, each door hugged the leading edge of a column
-            // nearly twice as wide as its content, so the four sat in two
-            // narrow stripes with a ragged gap down the middle and another
-            // down the right. Nothing lined up with anything. Centred, the
-            // icons fall on two axes and the labels hang off them — which is
-            // also how Grab's own grid reads.
-            .frame(maxWidth: .infinity)
-            .contentShape(.rect)
-        }
-        .buttonStyle(PressableCard())
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(service.title). \(service.status)")
-    }
-
-    private var artwork: some View {
-        ZStack {
-            // Shows only for the one illustration that doesn't carry its own
-            // disc; the other three cover it exactly.
-            Circle().fill(IGY.C.artTint)
-
-            Image(service.artwork)
-                .resizable()
-                // Fill, not fit: fitting the 4:3 ride scene would letterbox it
-                // inside the circle. Cropping loses that scene's left and right
-                // edges, which are background anyway.
-                .scaledToFill()
-        }
-        .frame(width: 64, height: 64)
-        .clipShape(.circle)
-        .accessibilityHidden(true)
-    }
-}
-
 /// A card press that scales slightly. The artboards are static, so nothing
 /// specifies this — but a hi-fi prototype that doesn't respond to touch reads
 /// as a screenshot, and "energetic" has to live somewhere.
@@ -105,7 +34,9 @@ struct ComingSoonCard: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    ChevronGlyph(direction: expanded ? .up : .down)
+                    Image(systemName: expanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(IGY.C.inkSecondary)
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 15)

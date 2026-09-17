@@ -45,11 +45,6 @@ extension View {
         modifier(HairlineCard(radius: radius, fill: fill, shadow: shadow))
     }
 
-    /// A card that also lifts — the Home service doors.
-    func liftedCard(radius: CGFloat = IGY.R.feature) -> some View {
-        hairlineCard(radius: radius, shadow: .card)
-    }
-
     /// A selection ring, used on the chosen vehicle row. 2pt brand green,
     /// replacing the hairline rather than sitting beside it.
     func selectedCard(radius: CGFloat = IGY.R.cardTight, selected: Bool) -> some View {
