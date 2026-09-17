@@ -23,23 +23,30 @@ struct ServiceCard: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(spacing: 10) {
                 artwork
 
-                VStack(alignment: .leading, spacing: 1) {
+                VStack(spacing: 1) {
                     Text(service.title)
                         .textRole(.serviceTitleSm)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.85)
+                        .minimumScaleFactor(0.8)
                     Text(service.status)
                         .textRole(.captionMed, IGY.C.inkMuted)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.9)
                 }
+                .multilineTextAlignment(.center)
             }
-            // Sized by its content now. The 146/132pt card heights existed to
-            // give the cards a shape; with no card they only added dead space
-            // between the icon and the words it belongs to.
-            .frame(maxWidth: .infinity, alignment: .leading)
+            // Centred in its half of the row.
+            //
+            // Left-aligned, each door hugged the leading edge of a column
+            // nearly twice as wide as its content, so the four sat in two
+            // narrow stripes with a ragged gap down the middle and another
+            // down the right. Nothing lined up with anything. Centred, the
+            // icons fall on two axes and the labels hang off them — which is
+            // also how Grab's own grid reads.
+            .frame(maxWidth: .infinity)
             .contentShape(.rect)
         }
         .buttonStyle(PressableCard())
@@ -48,15 +55,21 @@ struct ServiceCard: View {
     }
 
     private var artwork: some View {
-        Image(service.artwork)
-            .resizable()
-            // Fill, not fit: fitting the 4:3 ride scene would letterbox it
-            // inside the circle. Cropping loses that scene's left and right
-            // edges, which are background anyway.
-            .scaledToFill()
-            .frame(width: 62, height: 62)
-            .clipShape(.circle)
-            .accessibilityHidden(true)
+        ZStack {
+            // Shows only for the one illustration that doesn't carry its own
+            // disc; the other three cover it exactly.
+            Circle().fill(IGY.C.artTint)
+
+            Image(service.artwork)
+                .resizable()
+                // Fill, not fit: fitting the 4:3 ride scene would letterbox it
+                // inside the circle. Cropping loses that scene's left and right
+                // edges, which are background anyway.
+                .scaledToFill()
+        }
+        .frame(width: 64, height: 64)
+        .clipShape(.circle)
+        .accessibilityHidden(true)
     }
 }
 

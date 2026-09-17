@@ -68,6 +68,13 @@ extension IGY {
         static let brandTint     = Color(hex: 0xE4F7EB)   // mint fill
         static let brandTintEdge = Color(hex: 0xC4EDD3)   // ring around the avatar
 
+        /// The mint disc the service illustrations are drawn on. Sampled from
+        /// the artwork itself — #D4F2E1 in the ride scene, #CCEFDC in the food
+        /// badge — rather than reused from `brandTint`, which is a step lighter
+        /// and would have left the one illustration that needs a disc painted
+        /// underneath sitting visibly paler than the three that carry their own.
+        static let artTint       = Color(hex: 0xD0F0DE)
+
         /// The dark behind the Home header. Everything set on it is white or
         /// near-white, so it is never used as a text colour.
         static let brandDark     = Color(hex: 0x00562A)
