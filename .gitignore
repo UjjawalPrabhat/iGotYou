@@ -37,16 +37,16 @@ playground.xcworkspace
 
 # NOT ignored, deliberately:
 #
-#   iRob/Fonts/*.ttf
+#   iGotYou/Fonts/*.ttf
 #     Plus Jakarta Sans and IBM Plex Mono are bundled resources, not
 #     dependencies. The Jakarta weights are custom builds — instantiated from
 #     the variable font and given unique family names so iOS can address each
 #     one — and cannot be re-fetched from Google Fonts as-is. Losing them
 #     silently drops the whole app back to San Francisco.
 #
-#   iRob.xcodeproj/project.pbxproj
+#   iGotYou.xcodeproj/project.pbxproj
 #     Carries the settings the prototype depends on: iPhone-only, portrait-only,
 #     light-appearance lock, iOS 26 deployment target.
 #
-#   iRob.xcodeproj/project.xcworkspace/xcshareddata/
+#   iGotYou.xcodeproj/project.xcworkspace/xcshareddata/
 #     Shared workspace settings, as opposed to the per-user xcuserdata above.
