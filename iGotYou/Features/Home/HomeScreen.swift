@@ -141,8 +141,13 @@ struct HomeScreen: View {
 
     private var sheet: some View {
         VStack(spacing: 0) {
+            // 54, not 24. The curve rises 30pt at its centre and the sheet is
+            // pulled 30pt up into the field, so a nominal 24 left almost
+            // nothing between the arc and the first heading — the sheet looked
+            // like it started mid-sentence. This is the gap measured from where
+            // the curve actually crests rather than from the sheet's own top.
             usuals
-                .padding(.top, 24)
+                .padding(.top, 54)
             aroundYou
 
             // Clears the bottom accessory. TabView reports the tab bar as safe
