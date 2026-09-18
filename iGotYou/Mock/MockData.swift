@@ -14,10 +14,6 @@ enum Mock {
     // MARK: Identity
 
     static let location      = "Park 23 Mall"
-    /// The header shows the address under the place name. Two saved places can
-    /// share a name; the street is what tells them apart.
-    static let locationDetail = "Jl. Patih Jelantik, Kuta"
-    static let notificationCount = 7
 
     // MARK: Live activities
     //

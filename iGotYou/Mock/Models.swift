@@ -78,18 +78,6 @@ enum Service: String, CaseIterable, Identifiable, Hashable {
     }
 }
 
-/// The nine services that exist in the catalogue but aren't built yet.
-/// They stay on screen rather than being deleted — the scope note is explicit:
-/// "a superapp gets simpler through presentation, not subtraction".
-enum ComingSoon: String, CaseIterable, Identifiable {
-    case dineOut = "Dine out", mart = "Mart", pulsa = "Pulsa"
-    case health = "Health", hotels = "Hotels", loans = "Loans"
-    case insurance = "Insurance", jastip = "Jastip", subscribe = "Subscribe"
-
-    var id: String { rawValue }
-    static var summary: String { "Mart, Dine out, Health and 6 others" }
-}
-
 // MARK: - Live activity
 
 /// Something already in flight. Drives the dock pill, and the "HAPPENING NOW"

@@ -13,69 +13,6 @@ struct PressableCard: ButtonStyle {
     }
 }
 
-// MARK: - Coming soon
-
-/// The nine unbuilt services, collapsed to one row. Tapping expands them.
-/// They stay visible rather than being removed — that's the whole scope thesis.
-struct ComingSoonCard: View {
-    @State private var expanded = false
-
-    var body: some View {
-        VStack(spacing: 0) {
-            Button {
-                withAnimation(.easeOut(duration: 0.26)) { expanded.toggle() }
-            } label: {
-                HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text("9 more services coming soon")
-                            .textRole(.rowTitleSm)
-                        Text(ComingSoon.summary)
-                            .textRole(.caption, IGY.C.inkMuted)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    Image(systemName: expanded ? "chevron.up" : "chevron.down")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(IGY.C.inkSecondary)
-                }
-                .padding(.horizontal, 18)
-                .padding(.vertical, 15)
-                .contentShape(.rect)
-            }
-            .buttonStyle(.plain)
-
-            if expanded {
-                VStack(spacing: 14) {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4),
-                                             count: 5),
-                              spacing: 14) {
-                        ForEach(ComingSoon.allCases) { s in
-                            VStack(spacing: 6) {
-                                Circle()
-                                    .strokeBorder(IGY.C.hairline,
-                                                  style: StrokeStyle(lineWidth: 1.5, dash: [3, 3]))
-                                    .frame(width: 38, height: 38)
-                                Text(s.rawValue)
-                                    .textRole(.tabInactive, IGY.C.inkMuted)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.8)
-                            }
-                        }
-                    }
-                    Text("We'll tell you the moment these open.")
-                        .textRole(.caption, IGY.C.inkMuted)
-                }
-                .opacity(0.55)
-                .padding(.horizontal, 14)
-                .padding(.bottom, 16)
-                .transition(.opacity.combined(with: .move(edge: .top)))
-            }
-        }
-        .hairlineCard(radius: IGY.R.cardTight)
-        .clipped()
-    }
-}
-
 // MARK: - Section header
 
 struct SectionHeader: View {

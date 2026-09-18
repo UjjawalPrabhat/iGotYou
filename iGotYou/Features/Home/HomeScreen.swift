@@ -13,16 +13,20 @@ import SwiftUI
 // curves — the shape is what separates "what this app does" from "what is
 // happening in it" without needing a divider or a heading to say so.
 //
-// The location is a pill floating in the field, centred, rather than a bar
-// pinned to the top edge. It is the only control up here, so it does not need
-// a bar to live in, and centring it keeps the field symmetrical behind the
-// discs.
+// The location is a pill floating in the field rather than a bar pinned to the
+// top edge. It is glass, as is the profile button opposite it — they float over
+// the green with nothing behind them but the field, which is the layer the
+// material is for.
 //
 // Other scope decisions this screen still encodes:
-//   - Nothing removed. Four doors are open; nine more stay visible as Coming soon.
 //   - One entry point each: Wallet and Activity have tabs, so they get no door.
 //   - "Around you" replaces the ad slot. Explore was cut as a destination, so
 //     the discovery it would have carried lives here instead.
+//
+// One it no longer encodes: "nothing removed — nine more services stay visible
+// as Coming soon". That row is gone, so the other nine are now invisible rather
+// than deferred. Worth knowing the scope note in `ComingSoon` no longer
+// describes the screen.
 
 struct HomeScreen: View {
     @Environment(AppState.self) private var app
@@ -40,11 +44,21 @@ struct HomeScreen: View {
             }
         }
         .scrollIndicators(.hidden)
-        // The green reaches the top as a background that ignores the safe
-        // area, while the content inside still respects it. Letting the
-        // ScrollView ignore it instead put the status bar's own text on dark
-        // green without iOS switching it to light — dark on dark.
-        .background(IGY.C.brandDark.ignoresSafeArea())
+        // Green at the top, surface everywhere else.
+        //
+        // A flat green background was simpler but it also painted the bottom
+        // safe area, so scrolling to the end of the sheet revealed a green band
+        // under it with the dock floating on top. The green only has to reach
+        // far enough to cover the status bar, which the content itself still
+        // respects — letting the ScrollView ignore the safe area instead left
+        // iOS drawing dark status text on dark green.
+        .background {
+            ZStack(alignment: .top) {
+                IGY.C.surface
+                IGY.C.brandDark.frame(height: 320)
+            }
+            .ignoresSafeArea()
+        }
     }
 
     // MARK: The green field
@@ -72,57 +86,42 @@ struct HomeScreen: View {
         .background(IGY.C.brandDark)
     }
 
-    /// Where you are, and the two personal entry points.
+    /// Where you are, on the left; who you are, on the right.
     ///
-    /// The bell and the avatar ride on the pill rather than in a bar of their
-    /// own. They are the only other things up here, and giving them a separate
-    /// row would put a second horizontal band across a field whose whole job is
-    /// to be quiet behind the discs.
+    /// The notification bell is gone. Profile sits at the trailing edge, which
+    /// is where every other header in the app already puts it — it was in the
+    /// middle of a three-item cluster here and nowhere else.
+    ///
+    /// Both are glass. They float over the green field with nothing behind them
+    /// but the field itself, which is exactly the layer the material is for.
     private var locationPill: some View {
         HStack(spacing: 10) {
             Button {} label: {
                 HStack(spacing: 6) {
                     Image(systemName: "mappin.and.ellipse")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(IGY.C.brandDeep)
                     Text(Mock.location)
-                        .textRole(.label, IGY.C.ink)
+                        .textRole(.label)
                         .lineLimit(1)
                     Image(systemName: "chevron.down")
                         .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(IGY.C.inkSecondary)
                 }
+                .foregroundStyle(IGY.C.onBrand)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 11)
-                .background(IGY.C.card, in: .capsule)
+                .glassEffect(.regular, in: .capsule)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Delivering to \(Mock.location). Change")
 
-            Button { app.showingNotifications = true } label: {
-                ZStack(alignment: .topTrailing) {
-                    Circle().fill(.white.opacity(0.18))
-                        .overlay(Circle().strokeBorder(.white.opacity(0.45), lineWidth: 1))
-                        .frame(width: 40, height: 40)
-                    Image(systemName: "bell.fill")
-                        .font(.system(size: 15))
-                        .foregroundStyle(IGY.C.onBrand)
-                        .frame(width: 40, height: 40)
-                    if app.notificationCount > 0 {
-                        CountBadge(count: app.notificationCount, onDark: true)
-                            .offset(x: 6, y: -4)
-                    }
-                }
-                .frame(width: 40, height: 40)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Notifications, \(app.notificationCount) unread")
+            Spacer(minLength: 8)
 
             Button { app.showingProfile = true } label: {
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.system(size: 38))
-                    .foregroundStyle(IGY.C.onBrand.opacity(0.9))
-                    .frame(width: 40, height: 40)
+                Image(systemName: "person.fill")
+                    .font(.system(size: 17))
+                    .foregroundStyle(IGY.C.onBrand)
+                    .frame(width: 42, height: 42)
+                    .glassEffect(.regular, in: .circle)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Your profile")
@@ -134,11 +133,8 @@ struct HomeScreen: View {
 
     private var sheet: some View {
         VStack(spacing: 0) {
-            ComingSoonCard()
-                .padding(.horizontal, IGY.S.gutter)
-                .padding(.top, 46)
-
             usuals
+                .padding(.top, 24)
             aroundYou
 
             // Clears the bottom accessory. TabView reports the tab bar as safe
@@ -166,7 +162,6 @@ struct HomeScreen: View {
             }
         }
         .padding(.horizontal, IGY.S.gutter)
-        .padding(.top, 22)
     }
 
     // MARK: Around you

@@ -7,36 +7,21 @@ import SwiftUI
 // 9:41 because they're HTML, but reproducing that in a running app would be
 // wrong, so the header reserves the safe area instead and lets iOS fill it.
 //
-// Two variants, both the same height:
-//   .location — Home. Where you are, left; bell + avatar right.
-//   .title    — Wallet, Activity. Big title left, avatar right.
+// One variant: a big title on the left, the profile avatar on the right. Wallet
+// and Activity use it; Home builds its own bar into the green field.
 //
-// Two finishes. Glass covers the interior tabs. `onDark` puts Home's bar on
-// Grab's deep green, which is the one piece of their chrome identifiable from
-// a thumbnail — worth keeping even now the tall greeting band under it is gone.
-// The interior tabs stay on glass: green on every screen would flatten a
-// hierarchy Grab itself doesn't have.
-//
-// The location has no "Deliver to" eyebrow. A label over a value spends a line
-// saying what the pin already says, and Zomato's header is the better pattern —
-// the place on top, its address under it, both tappable as one control. The
-// address is what actually disambiguates two saved places with similar names.
+// There was a `.location` variant here with a picker and a notification bell,
+// and an `onDark` finish for the green band it sat on. Home now draws that bar
+// itself and the bell is gone from the app, so both went with their last
+// callers.
 
 enum HeaderContent {
-    case location(value: String, detail: String, badge: Int)
     case title(String)
 }
 
 struct GlassHeader: View {
     let content: HeaderContent
-    /// Renders on the green band: white type, inverted controls.
-    var onDark: Bool = false
-    var onBell: () -> Void = {}
     var onAvatar: () -> Void = {}
-    var onLocation: () -> Void = {}
-
-    private var titleInk: Color { onDark ? IGY.C.onBrand : IGY.C.ink }
-    private var subInk: Color { onDark ? IGY.C.onBrandMuted : IGY.C.inkMuted }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -45,14 +30,8 @@ struct GlassHeader: View {
 
             HStack(alignment: .center, spacing: 10) {
                 switch content {
-                case let .location(value, detail, badge):
-                    picker(value: value, detail: detail)
-                    Spacer(minLength: 8)
-                    bell(badge: badge)
-                    avatar
-
                 case let .title(text):
-                    Text(text).textRole(.navTitle, titleInk)
+                    Text(text).textRole(.navTitle)
                     Spacer(minLength: 8)
                     avatar
                 }
@@ -62,60 +41,14 @@ struct GlassHeader: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 4)
-        .background(HeaderMaterial(onDark: onDark))
-    }
-
-    private func picker(value: String, detail: String) -> some View {
-        Button(action: onLocation) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 5) {
-                    Image(systemName: "mappin.circle.fill")
-                        .font(.system(size: 17))
-                        .foregroundStyle(onDark ? IGY.C.onBrand : IGY.C.brand)
-                    Text(value).textRole(.navTitleSm, titleInk)
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(titleInk)
-                }
-                Text(detail)
-                    .textRole(.caption, subInk)
-                    .lineLimit(1)
-            }
-            .contentShape(.rect)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Delivering to \(value), \(detail). Change")
-    }
-
-    private func bell(badge: Int) -> some View {
-        Button(action: onBell) {
-            ZStack(alignment: .topTrailing) {
-                Circle()
-                    .fill(onDark ? Color.white.opacity(0.18) : .white.opacity(0.7))
-                    .overlay(
-                        Circle().strokeBorder(.white.opacity(onDark ? 0.45 : 0.9),
-                                              lineWidth: onDark ? 1 : 0.5)
-                    )
-                    .frame(width: 36, height: 36)
-                Image(systemName: "bell.fill")
-                    .font(.system(size: 15))
-                    .foregroundStyle(onDark ? IGY.C.onBrand : IGY.C.inkSecondary)
-                    .frame(width: 36, height: 36)
-                if badge > 0 {
-                    CountBadge(count: badge, onDark: onDark).offset(x: 5, y: -4)
-                }
-            }
-            .frame(width: 36, height: 36)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Notifications, \(badge) unread")
+        .background(HeaderMaterial())
     }
 
     private var avatar: some View {
         Button(action: onAvatar) {
             Image(systemName: "person.crop.circle.fill")
                 .font(.system(size: 34))
-                .foregroundStyle(onDark ? IGY.C.onBrand.opacity(0.9) : IGY.C.brand)
+                .foregroundStyle(IGY.C.brand)
                 .frame(width: 36, height: 36)
         }
         .buttonStyle(.plain)
@@ -127,18 +60,11 @@ struct GlassHeader: View {
 /// highlight along the *bottom* edge (`inset 0 -0.5px 0`) rather than the top —
 /// the header is lit from below by the content passing under it.
 private struct HeaderMaterial: View {
-    var onDark: Bool = false
-
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     var body: some View {
         Group {
-            if onDark {
-                // Opaque, not glass. The band is a surface in Grab's system,
-                // not chrome floating over one, and translucency here would let
-                // the white cards scrolling under it turn the green muddy.
-                IGY.C.brandDark
-            } else if reduceTransparency {
+            if reduceTransparency {
                 IGY.C.surface.opacity(0.96)
             } else {
                 // The real material. This was a white tint over
@@ -152,7 +78,7 @@ private struct HeaderMaterial: View {
             }
         }
         .overlay(alignment: .bottom) {
-            if !onDark && reduceTransparency {
+            if reduceTransparency {
                 Rectangle().fill(IGY.C.hairline).frame(height: 0.5)
             }
         }

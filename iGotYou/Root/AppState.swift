@@ -21,7 +21,6 @@ final class AppState {
     var visibleActivityIndex: Int = 0
 
     var carts: [Cart] = Mock.carts
-    var notificationCount: Int = Mock.notificationCount
 
     /// Which service flow is presented over the tabs, if any.
     /// Also honours `-startService <name>` for the screenshot pass.
@@ -29,7 +28,6 @@ final class AppState {
         let arg = UserDefaults.standard.string(forKey: "startService") ?? ""
         return Service(rawValue: arg)
     }()
-    var showingNotifications = false
     var showingProfile = false
 
     // MARK: Derived
