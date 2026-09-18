@@ -493,6 +493,11 @@ private struct RouteRail: View {
 /// Now / Later. Hand-built rather than a segmented `Picker` because the two
 /// options carry symbols and the control sits on the header's centre line —
 /// `.segmented` gives neither, and restyling it is more code than this.
+///
+/// The track is glass; the thumb is solid. Both on glass would be the layering
+/// the material can't do — the thumb samples the track, the track samples the
+/// screen, and the stack flattens. A solid thumb on a glass track is content
+/// on chrome, which is the direction that works.
 private struct SegmentedPill: View {
     @Binding var selection: RideTiming
 
@@ -508,12 +513,12 @@ private struct SegmentedPill: View {
                             .font(.system(size: 12, weight: .semibold))
                         Text(option.rawValue).textRole(.label)
                     }
-                    .foregroundStyle(isOn ? IGY.C.ink : IGY.C.inkMuted)
+                    .foregroundStyle(isOn ? IGY.C.onBrand : IGY.C.inkSecondary)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 9)
                     .background {
                         if isOn {
-                            Capsule().fill(IGY.C.card).igyShadow(.card)
+                            Capsule().fill(IGY.C.brandDeep)
                         }
                     }
                 }
@@ -522,7 +527,7 @@ private struct SegmentedPill: View {
             }
         }
         .padding(3)
-        .background(IGY.C.surfaceMuted, in: Capsule())
+        .glassEffect(.regular, in: .capsule)
     }
 }
 

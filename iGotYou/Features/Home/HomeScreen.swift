@@ -94,19 +94,32 @@ struct HomeScreen: View {
     ///
     /// Both are glass. They float over the green field with nothing behind them
     /// but the field itself, which is exactly the layer the material is for.
+    ///
+    /// Their contents are dark, not white. Glass over the deep green renders as
+    /// a pale, desaturated surface — white symbols on it had barely more
+    /// contrast than the glass had against the field, so the pin and the
+    /// profile mark read as smudges. Dark ink is what the material expects to
+    /// carry, and it's what every other glass control in the app already
+    /// carries.
+    ///
+    /// The pin is ink rather than brand green for the same reason the chevron
+    /// is: on a green pill, over a green field, a green pin is the third green
+    /// in two centimetres. The one thing on the control that should read as
+    /// coloured is nothing — it's a label, not a state.
     private var locationPill: some View {
         HStack(spacing: 10) {
             Button {} label: {
                 HStack(spacing: 6) {
                     Image(systemName: "mappin.and.ellipse")
                         .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(IGY.C.ink)
                     Text(Mock.location)
-                        .textRole(.label)
+                        .textRole(.label, IGY.C.ink)
                         .lineLimit(1)
                     Image(systemName: "chevron.down")
                         .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(IGY.C.inkSecondary)
                 }
-                .foregroundStyle(IGY.C.onBrand)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 11)
                 .glassEffect(.regular, in: .capsule)
@@ -116,14 +129,9 @@ struct HomeScreen: View {
 
             Spacer(minLength: 8)
 
-            Button { app.showingProfile = true } label: {
-                Image(systemName: "person.fill")
-                    .font(.system(size: 17))
-                    .foregroundStyle(IGY.C.onBrand)
-                    .frame(width: 42, height: 42)
-                    .glassEffect(.regular, in: .circle)
+            CircleButton(symbol: "person.fill", size: 42) {
+                app.showingProfile = true
             }
-            .buttonStyle(.plain)
             .accessibilityLabel("Your profile")
         }
         .padding(.horizontal, IGY.S.gutter)

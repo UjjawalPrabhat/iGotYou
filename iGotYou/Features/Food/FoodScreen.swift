@@ -389,7 +389,13 @@ private struct FilterChip: View {
             }
         }
         .buttonBorderShape(.capsule)
-        .tint(IGY.C.ink)
+        // Brand green when engaged, ink when not.
+        //
+        // `.glassProminent` fills with the tint, and tinting it ink made an
+        // active filter a black capsule — the heaviest thing on a screen of
+        // food photography, and the colour the app uses for nothing else.
+        // Green says the same thing and says it in the app's own voice.
+        .tint(isOn ? IGY.C.brandDeep : IGY.C.ink)
         .accessibilityAddTraits(isOn ? [.isSelected] : [])
     }
 }
