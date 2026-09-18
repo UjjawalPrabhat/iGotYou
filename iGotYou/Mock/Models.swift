@@ -115,18 +115,20 @@ struct Place: Identifiable, Hashable {
     var art: PlaceArt
 }
 
-/// Which stripe pair stands in for the photo. Real photography is called out in
-/// the design notes as "the single biggest lift available" — leaving these as
-/// marked placeholders is honest about what has actually been designed.
+/// Which stripe pair stands in for the photo.
+///
+/// Only "Around you" still uses these. Everything on the Food screen — the
+/// cuisine rail, the dishes, the restaurants, the carts — now has real
+/// photography, which the design notes called "the single biggest lift
+/// available". The two places on Home don't, and a marked placeholder is more
+/// honest there than borrowing a picture of something else.
 enum PlaceArt: Hashable {
-    case mint, coral, gold, blue
+    case mint, coral
 
     @MainActor var placeholder: StripePlaceholder {
         switch self {
         case .mint:  .mint
         case .coral: .coral
-        case .gold:  .gold
-        case .blue:  .blue
         }
     }
 }
@@ -141,7 +143,7 @@ struct Restaurant: Identifiable, Hashable {
     var eta: String               // "32 min"
     var freeDelivery: Bool
     var inCart: Int               // 0 = no cart badge
-    var art: PlaceArt
+    var artwork: String
 }
 
 /// A cuisine rail entry. These ride in the pinned header and never scroll away,
@@ -151,14 +153,14 @@ struct Restaurant: Identifiable, Hashable {
 struct FoodCategory: Identifiable, Hashable {
     let id = UUID()
     var name: String
-    var art: PlaceArt
+    var artwork: String
 }
 
 struct Dish: Identifiable, Hashable {
     let id = UUID()
     var name: String
     var price: String
-    var art: PlaceArt
+    var artwork: String
 }
 
 /// One restaurant's cart. The multi-cart tray is the key Food decision: three
@@ -169,7 +171,7 @@ struct Cart: Identifiable, Hashable {
     var restaurant: String
     var itemCount: Int
     var total: String
-    var art: PlaceArt
+    var artwork: String
     /// A closed kitchen can't be checked out — the row offers Remove instead.
     var isAvailable: Bool = true
 

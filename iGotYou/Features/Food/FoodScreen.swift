@@ -208,11 +208,16 @@ struct FoodScreen: View {
                         withAnimation(.easeOut(duration: 0.18)) { category = item.id }
                     } label: {
                         VStack(spacing: 7) {
-                            item.art.placeholder.stripeWidth(5)
+                            Image(item.artwork)
+                                .resizable()
+                                .scaledToFill()
                                 .frame(width: 46, height: 46)
                                 .clipShape(Circle())
                                 .overlay(Circle().strokeBorder(IGY.C.hairline, lineWidth: 1))
-                                .opacity(isOn ? 1 : 0.72)
+                                // An unselected cuisine dims rather than greys.
+                                // These are photographs; desaturating them would
+                                // read as "unavailable" instead of "not chosen".
+                                .opacity(isOn ? 1 : 0.55)
 
                             Text(item.name)
                                 .textRole(.chip, isOn ? IGY.C.ink : IGY.C.inkMuted)
@@ -264,7 +269,9 @@ struct FoodScreen: View {
                 HStack(alignment: .top, spacing: 12) {
                     ForEach(Mock.orderAgain) { dish in
                         VStack(alignment: .leading, spacing: 0) {
-                            dish.art.placeholder.caption("dish photo")
+                            Image(dish.artwork)
+                                .resizable()
+                                .scaledToFill()
                                 .frame(width: 150, height: 100)
                                 .clipShape(RoundedRectangle(cornerRadius: IGY.R.control,
                                                             style: .continuous))
@@ -395,7 +402,9 @@ private struct CartDockRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            cart.art.placeholder.stripeWidth(5)
+            Image(cart.artwork)
+                .resizable()
+                .scaledToFill()
                 .frame(width: 40, height: 40)
                 .clipShape(Circle())
                 .overlay(Circle().strokeBorder(IGY.C.hairline, lineWidth: 1))
@@ -525,7 +534,9 @@ private struct CartRow: View {
         // "Kebabs & Kurries" truncated — and a cart you can't identify is
         // worse than one you can't dismiss in a single tap.
         HStack(spacing: 10) {
-            cart.art.placeholder.stripeWidth(6)
+            Image(cart.artwork)
+                .resizable()
+                .scaledToFill()
                 .frame(width: 38, height: 38)
                 .clipShape(Circle())
                 .overlay(Circle().strokeBorder(IGY.C.hairline, lineWidth: 1))
@@ -634,8 +645,12 @@ private struct RestaurantCard: View {
     var body: some View {
         Button {} label: {
             VStack(spacing: 0) {
-                restaurant.art.placeholder.stripeWidth(9).caption("restaurant photo")
-                    .frame(height: 132)
+                Image(restaurant.artwork)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 148)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(alignment: .firstTextBaseline, spacing: 10) {

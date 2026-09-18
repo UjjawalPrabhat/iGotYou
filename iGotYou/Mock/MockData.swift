@@ -94,12 +94,15 @@ enum Mock {
     /// The pinned cuisine rail. "All" leads because it's the resting state, not
     /// a cuisine — clearing a category has to be as easy as choosing one.
     static let foodCategories: [FoodCategory] = [
-        FoodCategory(name: "All",      art: .mint),
-        FoodCategory(name: "Biryani",  art: .gold),
-        FoodCategory(name: "Kebabs",   art: .coral),
-        FoodCategory(name: "Nasi",     art: .gold),
-        FoodCategory(name: "Sate",     art: .coral),
-        FoodCategory(name: "Desserts", art: .blue),
+        // "All" is a spread rather than a single dish, which is the right
+        // picture for the state that clears the filter: it shows the range the
+        // other five each narrow.
+        FoodCategory(name: "All",      artwork: "grab_all-food"),
+        FoodCategory(name: "Biryani",  artwork: "grab_biryani"),
+        FoodCategory(name: "Kebabs",   artwork: "grab_kebabs"),
+        FoodCategory(name: "Nasi",     artwork: "grab_nasi"),
+        FoodCategory(name: "Sate",     artwork: "grab_sate"),
+        FoodCategory(name: "Desserts", artwork: "grab_desserts"),
     ]
 
     /// Filters narrow whatever category is showing. Multi-select, and none of
@@ -108,23 +111,26 @@ enum Mock {
     static let foodFilters = ["Under 30 min", "Free delivery", "4.5+", "Near & fast"]
 
     static let orderAgain: [Dish] = [
-        Dish(name: "Samosa chaat", price: "Rp75.000", art: .coral),
-        Dish(name: "Nasi campur",  price: "Rp52.000", art: .gold),
+        Dish(name: "Samosa chaat", price: "Rp75.000", artwork: "grab_samosa-chat"),
+        Dish(name: "Nasi campur",  price: "Rp52.000", artwork: "grab_nasi-campur"),
     ]
 
     static let restaurants: [Restaurant] = [
         Restaurant(name: "Kebabs & Kurries",
                    cuisine: "North Indian · Kuta · 1.2 km",
                    rating: "4.7", eta: "32 min",
-                   freeDelivery: true, inCart: 2, art: .coral),
+                   freeDelivery: true, inCart: 2,
+                   artwork: "grab_kebabs-and-curries"),
         Restaurant(name: "Warung Bu Made",
                    cuisine: "Balinese · Tuban · 0.8 km",
                    rating: "4.5", eta: "24 min",
-                   freeDelivery: false, inCart: 1, art: .mint),
+                   freeDelivery: false, inCart: 1,
+                   artwork: "grab_warung-bu-made"),
         Restaurant(name: "Sate Ayam Pak Tono",
                    cuisine: "Indonesian · Legian · 2.4 km",
                    rating: "4.8", eta: "",
-                   freeDelivery: false, inCart: 0, art: .blue),
+                   freeDelivery: false, inCart: 0,
+                   artwork: "grab_sate-ayam-pak-tono"),
     ]
 
     /// Oldest first. There's no timestamp on `Cart` — the prototype has no
@@ -133,10 +139,14 @@ enum Mock {
     /// sits in the middle deliberately: it has to be reachable in the full list
     /// without being the one the dock puts forward.
     static let carts: [Cart] = [
-        Cart(restaurant: "Kebabs & Kurries",   itemCount: 2, total: "Rp260.000", art: .coral),
+        Cart(restaurant: "Kebabs & Kurries", itemCount: 2, total: "Rp260.000",
+             artwork: "grab_kebabs-and-curries"),
+        // No photo was supplied for this one; the nasi dish stands in, which is
+        // what it sells.
         Cart(restaurant: "Nasi Tempong Indra", itemCount: 1, total: "Rp0",
-             art: .gold, isAvailable: false),
-        Cart(restaurant: "Warung Bu Made",     itemCount: 1, total: "Rp52.000",  art: .mint),
+             artwork: "grab_nasi", isAvailable: false),
+        Cart(restaurant: "Warung Bu Made", itemCount: 1, total: "Rp52.000",
+             artwork: "grab_warung-bu-made"),
     ]
 
     static let cartTotal = "Rp312.000 total · checkout separately"

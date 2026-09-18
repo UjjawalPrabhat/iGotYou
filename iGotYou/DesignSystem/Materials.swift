@@ -124,17 +124,10 @@ struct StripePlaceholder: View {
     static let coral = StripePlaceholder(a: IGY.C.coralTint,  b: IGY.C.coralWash)
     static let gold  = StripePlaceholder(a: IGY.C.goldTint,   b: IGY.C.goldWash)
     static let blue  = StripePlaceholder(a: IGY.C.blueTint,   b: IGY.C.blueWash)
-    static let lilac = StripePlaceholder(a: IGY.C.violetTint, b: Color(hex: 0xF6F4FD))
 
     func caption(_ text: String) -> StripePlaceholder {
         var copy = self
         copy.caption = text
-        return copy
-    }
-
-    func stripeWidth(_ w: CGFloat) -> StripePlaceholder {
-        var copy = self
-        copy.stripe = w
         return copy
     }
 }
